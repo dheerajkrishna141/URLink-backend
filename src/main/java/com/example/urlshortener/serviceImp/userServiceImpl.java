@@ -11,7 +11,7 @@ import com.example.urlshortener.Exceptions.UserNotUniqueException;
 import com.example.urlshortener.Repository.UrlRepository;
 import com.example.urlshortener.Repository.UserRepository;
 import com.example.urlshortener.entity.User;
-import com.example.urlshortener.entity.urlLoader;
+import com.example.urlshortener.entity.Url;
 import com.example.urlshortener.payload.loginMessage;
 import com.example.urlshortener.payload.urlDTO;
 import com.example.urlshortener.payload.userDTO;
@@ -34,7 +34,7 @@ public class userServiceImpl implements userService{
 		if(user != null) throw new UserNotUniqueException("Username already exisits!");
 		
 		user = modelmapper.map(userdto, User.class);
-		userRepository.save(user);
+		user = userRepository.save(user);
 		
 		
 		return modelmapper.map(user, userDTO.class);

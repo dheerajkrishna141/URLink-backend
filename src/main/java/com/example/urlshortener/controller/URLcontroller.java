@@ -2,9 +2,9 @@ package com.example.urlshortener.controller;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import org.springframework.http.HttpHeaders;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.urlshortener.Repository.UrlRepository;
-import com.example.urlshortener.entity.urlLoader;
 import com.example.urlshortener.payload.urlDTO;
 import com.example.urlshortener.payload.urlUpdateDTO;
 import com.example.urlshortener.service.urlService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @CrossOrigin
@@ -45,6 +45,7 @@ public class URLcontroller {
 		return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
 		
 	}
+	@Operation(description = "Displays all the URL's of the user" )
 	@GetMapping("/{userid}")
 	public ResponseEntity<?> viewRedirects(@PathVariable(name="userid") long userid){
 		return new ResponseEntity<>(urlservice.Userurls(userid), HttpStatus.ACCEPTED);

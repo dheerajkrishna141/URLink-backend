@@ -13,8 +13,8 @@ import com.example.urlshortener.Exceptions.UrlNotUniqueException;
 import com.example.urlshortener.Exceptions.UserNotFoundException;
 import com.example.urlshortener.Repository.UrlRepository;
 import com.example.urlshortener.Repository.UserRepository;
+import com.example.urlshortener.entity.Url;
 import com.example.urlshortener.entity.User;
-import com.example.urlshortener.entity.urlLoader;
 import com.example.urlshortener.payload.urlDTO;
 import com.example.urlshortener.payload.urlUpdateDTO;
 import com.example.urlshortener.service.urlService;
@@ -32,18 +32,18 @@ public class urlServiceImp implements urlService {
 	public urlDTO createRedirect(Long userid, urlDTO urldto) {
 		User user = userRepo.findById(userid)
 				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<urlLoader> lit = urlRepo.findAllByUsersId(userid);
+		List<Url> lit = urlRepo.findAllByUsersId(userid);
 		urldto.setUrl(urldto.getUrl().trim());
-		for (urlLoader a : lit) {
+		for (Url a : lit) {
 			if (a.getAlias().equals(urldto.getAlias())) {
 				throw new AliasNotUniqueException("Alias with user Id: " + userid + " is not unique");
 			} else if(a.getUrl().equals(urldto.getUrl())){
 				throw new UrlNotUniqueException("URL already exists");
 			}
 		}
-		urlLoader url = urlRepo.save(modelmapper.map(urldto, urlLoader.class));
+		Url url = urlRepo.save(modelmapper.map(urldto, Url.class));
 		url.setUsers(user);
-		urlLoader savedurl = urlRepo.save(url);
+		Url savedurl = urlRepo.save(url);
 		return modelmapper.map(savedurl, urlDTO.class);
 	}
 
@@ -51,9 +51,9 @@ public class urlServiceImp implements urlService {
 	public urlDTO getRedirect(long userid, String alias) {
 		User user = userRepo.findById(userid)
 				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<urlLoader> lit = urlRepo.findAllByUsersId(userid);
-		urlLoader url=null;
-		for(urlLoader a: lit) {
+		List<Url> lit = urlRepo.findAllByUsersId(userid);
+		Url url=null;
+		for(Url a: lit) {
 			if(a.getAlias().equals(alias)) {
 				url=a;
 				break;
@@ -69,9 +69,9 @@ public class urlServiceImp implements urlService {
 	public void deleteRedirect(long userid,String alias) {
 		User user = userRepo.findById(userid)
 				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<urlLoader> lit = urlRepo.findAllByUsersId(userid);
-		urlLoader url=null;
-		for(urlLoader a: lit) {
+		List<Url> lit = urlRepo.findAllByUsersId(userid);
+		Url url=null;
+		for(Url a: lit) {
 			if(a.getAlias().equals(alias)) {
 				url=a;
 				break;
@@ -89,10 +89,10 @@ public class urlServiceImp implements urlService {
 		
 		User user = userRepo.findById(userid).orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
 
-		List<urlLoader> lit = urlRepo.findAllByUsersId(user.getId());
+		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 	
 		List<urlDTO> list = new ArrayList<>();
-		for(urlLoader a: lit) {
+		for(Url a: lit) {
 			urlDTO b = new urlDTO();
 			b.setAlias(a.getAlias());
 			b.setUrl(a.getUrl());
@@ -104,11 +104,11 @@ public class urlServiceImp implements urlService {
 	@Override
 	public void updateRedirect(long userid, urlUpdateDTO urlDto) {
 		User user = userRepo.findById(userid).orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<urlLoader> urlList = urlRepo.findAllByUsersId(userid);
-		urlLoader a =null;
-		for(urlLoader url: urlList) {
+		List<Url> urlList = urlRepo.findAllByUsersId(userid);
+		Url a =null;
+		for(Url url: urlList) {
 			if(url.getAlias().equals(urlDto.getAlias())) {
-				for(urlLoader url_c: urlList) {
+				for(Url url_c: urlList) {
 					if(url_c.getUrl().equals(urlDto.getNewUrl())) {
 						throw new UrlNotUniqueException("Entered new URL already exists!");
 					}

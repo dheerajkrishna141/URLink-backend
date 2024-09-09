@@ -4,23 +4,23 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.urlshortener.entity.urlLoader;
+import com.example.urlshortener.entity.Url;
 import java.util.List;
 
-public interface UrlRepository extends JpaRepository<urlLoader,Long>{
+public interface UrlRepository extends JpaRepository<Url,Long>{
 
 	boolean existsByAlias(String alias);
 
 	
 
-	Optional<urlLoader> findByAlias(String alias);
+	Optional<Url> findByAlias(String alias);
 
 
 
 
 
 
-	List<urlLoader> findAllByUsersId(Long userid);
+	List<Url> findAllByUsersId(Long userid);
 
 	
 
