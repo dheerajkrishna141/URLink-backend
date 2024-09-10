@@ -3,6 +3,8 @@ package com.example.urlshortener.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,26 +16,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.urlshortener.payload.userDTO;
 import com.example.urlshortener.service.userService;
+
+import jakarta.validation.Valid;
 @RestController
 @CrossOrigin
-@RequestMapping("/api/auth")
+@RequestMapping("/user")
 public class UserController {
 	@Autowired
 	private userService userService; 
 	
 	@PostMapping("/register")
-	public ResponseEntity<userDTO> createUser(@RequestBody userDTO userdto){
+	public ResponseEntity<?> createUser(@RequestBody @Valid userDTO userdto){
 		return new ResponseEntity<>(userService.createUser(userdto), HttpStatus.CREATED);
 		
 	}
-	@PostMapping("/login")
-	public ResponseEntity<?> loginUser(@RequestBody userDTO userdto){
-		return new ResponseEntity<>(userService.loginUser(userdto), HttpStatus.OK);
+	@GetMapping("/login")
+	public ResponseEntity<?> loginUser(Authentication auth){
+		
+		return new ResponseEntity<>(userService.loginUser(auth.getName()), HttpStatus.OK);
+//		return new ResponseEntity<>("Hello", HttpStatus.OK);
 	}
 	
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteUser(@PathVariable(name="id") long id){
+	public ResponseEntity<String> deleteUser(@PathVariable long id){
 		userService.deleteUser(id);
 		return new ResponseEntity<String>("User with ID: "+id+" has been deleted succesfully.", HttpStatus.OK);
 	}
