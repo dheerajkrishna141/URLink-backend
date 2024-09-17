@@ -8,9 +8,9 @@ import com.example.urlshortener.payload.urlUpdateDTO;
 
 public interface urlService {
 
-	public urlDTO createRedirect(Long userid, urlDTO urldto);
-	public urlDTO getRedirect(long userid, String alias);
-	public void deleteRedirect(long userid, String alias);
-	public void updateRedirect(long userid, urlUpdateDTO urlDto);
-	public List<urlDTO> Userurls(long userid);
+	public urlDTO createRedirect(String username, urlDTO urldto);
+	public urlDTO getRedirect(String username, String alias);
+	public void deleteRedirect(String username, String alias);
+	public void updateRedirect(String username, urlUpdateDTO urlDto);
+	public List<urlDTO> Userurls(String username);
 }

@@ -29,14 +29,13 @@ public class urlServiceImp implements urlService {
 	private ModelMapper modelmapper;
 
 	@Override
-	public urlDTO createRedirect(Long userid, urlDTO urldto) {
-		User user = userRepo.findById(userid)
-				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<Url> lit = urlRepo.findAllByUsersId(userid);
+	public urlDTO createRedirect(String username, urlDTO urldto) {
+		User user = userRepo.findByUsername(username);
+		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 		urldto.setUrl(urldto.getUrl().trim());
 		for (Url a : lit) {
 			if (a.getAlias().equals(urldto.getAlias())) {
-				throw new AliasNotUniqueException("Alias with user Id: " + userid + " is not unique");
+				throw new AliasNotUniqueException("Alias: " + urldto.getAlias() + " is not unique");
 			} else if(a.getUrl().equals(urldto.getUrl())){
 				throw new UrlNotUniqueException("URL already exists");
 			}
@@ -48,10 +47,9 @@ public class urlServiceImp implements urlService {
 	}
 
 	@Override
-	public urlDTO getRedirect(long userid, String alias) {
-		User user = userRepo.findById(userid)
-				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<Url> lit = urlRepo.findAllByUsersId(userid);
+	public urlDTO getRedirect(String username, String alias) {
+		User user = userRepo.findByUsername(username);
+		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 		Url url=null;
 		for(Url a: lit) {
 			if(a.getAlias().equals(alias)) {
@@ -59,17 +57,16 @@ public class urlServiceImp implements urlService {
 				break;
 			}
 		}if(url==null) {
-			throw new AliasNotUniqueException("Alias: "+alias+" is not found with user Id: "+userid);
+			throw new AliasNotUniqueException("Alias: "+alias+" is not found!");
 		}
 		
 		return modelmapper.map(url, urlDTO.class);
 	}
 
 	@Override
-	public void deleteRedirect(long userid,String alias) {
-		User user = userRepo.findById(userid)
-				.orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<Url> lit = urlRepo.findAllByUsersId(userid);
+	public void deleteRedirect(String username,String alias) {
+		User user = userRepo.findByUsername(username);
+		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 		Url url=null;
 		for(Url a: lit) {
 			if(a.getAlias().equals(alias)) {
@@ -77,7 +74,7 @@ public class urlServiceImp implements urlService {
 				break;
 			}
 		}if(url==null) {
-			throw new AliasNotUniqueException("Alias: "+alias+" is not found with user Id: "+userid);
+			throw new AliasNotUniqueException("Alias: "+alias+" is not found!");
 		}
 		urlRepo.delete(url);
 		return;
@@ -85,9 +82,9 @@ public class urlServiceImp implements urlService {
 	
 
 	@Override
-	public List<urlDTO> Userurls(long userid) {
+	public List<urlDTO> Userurls(String username) {
 		
-		User user = userRepo.findById(userid).orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
+		User user = userRepo.findByUsername(username);
 
 		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 	
@@ -102,9 +99,9 @@ public class urlServiceImp implements urlService {
 	}
 
 	@Override
-	public void updateRedirect(long userid, urlUpdateDTO urlDto) {
-		User user = userRepo.findById(userid).orElseThrow(() -> new UserNotFoundException("User with ID:" + userid + " is not found!"));
-		List<Url> urlList = urlRepo.findAllByUsersId(userid);
+	public void updateRedirect(String username, urlUpdateDTO urlDto) {
+		User user = userRepo.findByUsername(username);
+		List<Url> urlList = urlRepo.findAllByUsersId(user.getId());
 		Url a =null;
 		for(Url url: urlList) {
 			if(url.getAlias().equals(urlDto.getAlias())) {

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,22 +25,23 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/user/url")
+@RequestMapping("/url")
 public class URLcontroller {
 	@Autowired
 	private urlService urlservice;
 	
 	
 	@PostMapping
-	public ResponseEntity<urlDTO> createRedirect(@PathVariable long userid,  @RequestBody urlDTO urldto){
-		
-		return new ResponseEntity<urlDTO>(urlservice.createRedirect(userid, urldto), HttpStatus.OK);
+	public ResponseEntity<urlDTO> createRedirect(Authentication auth,  @RequestBody urlDTO urldto){
+		String username = auth.getName();
+		return new ResponseEntity<urlDTO>(urlservice.createRedirect(username, urldto), HttpStatus.OK);
 		
 	}
 	
-	@GetMapping("/{userid}/{alias}")
-	public ResponseEntity<?> HandleRedirect(@PathVariable long userid, @PathVariable String alias) throws URISyntaxException{
-		urlDTO urldto = urlservice.getRedirect(userid, alias);
+	@GetMapping("/{alias}")
+	public ResponseEntity<?> HandleRedirect(Authentication auth, @PathVariable String alias) throws URISyntaxException{
+		String username = auth.getName();
+		urlDTO urldto = urlservice.getRedirect(username, alias);
 		URI uri = new URI(urldto.getUrl());
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uri);
@@ -47,20 +49,23 @@ public class URLcontroller {
 		
 	}
 	@Operation(description = "Displays all the URL's of the user" )
-	@GetMapping("/{userid}")
-	public ResponseEntity<?> viewRedirects(@PathVariable long userid){
-		return new ResponseEntity<>(urlservice.Userurls(userid), HttpStatus.ACCEPTED);
+	@GetMapping
+	public ResponseEntity<?> viewRedirects(Authentication auth){
+		String username = auth.getName();
+		return new ResponseEntity<>(urlservice.Userurls(username), HttpStatus.ACCEPTED);
 	}
 	
-	@PostMapping("/update/{userid}")
-	public ResponseEntity<?> updateRedirect(@PathVariable long userid, @RequestBody urlUpdateDTO urldto){
-		urlservice.updateRedirect(userid, urldto);
+	@PostMapping("/update")
+	public ResponseEntity<?> updateRedirect(Authentication auth, @RequestBody urlUpdateDTO urldto){
+		String username = auth.getName();
+		urlservice.updateRedirect(username, urldto);
 		return new ResponseEntity<String>("URL Successfully updated", HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/{userid}/{alias}")
-	public ResponseEntity<String> DeleteRedirect(@PathVariable long userid,@PathVariable String alias){
-		urlservice.deleteRedirect(userid,alias);
+	@DeleteMapping("/{alias}")
+	public ResponseEntity<String> DeleteRedirect(Authentication auth,@PathVariable String alias){
+		String username = auth.getName();
+		urlservice.deleteRedirect(username,alias);
 		return new ResponseEntity<String>("Alias Successfully deleted", HttpStatus.OK);
 	}
 
