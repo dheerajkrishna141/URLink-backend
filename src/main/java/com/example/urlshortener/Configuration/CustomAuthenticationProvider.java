@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import com.example.urlshortener.Repository.UserRepository;
 import com.example.urlshortener.entity.User;
 
-@Component
 @Configuration
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
