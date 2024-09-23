@@ -1,10 +1,12 @@
 package com.example.urlshortener.Security;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -17,22 +19,23 @@ public class WebSecurityConfig {
 
 	@Autowired
 	AuthenticationEntryPoint authEntry;
-	
+
 	@Autowired
 	CustomLogoutHandler logoutHandler;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+		http.csrf(csrf -> csrf.disable());
 		http.cors(cors -> cors.configurationSource(request -> {
 			CorsConfiguration config = new CorsConfiguration();
-			config.setAllowedOrigins(Collections.singletonList("http://localhost:5173"));
+			config.setAllowedOriginPatterns(Collections.singletonList("*"));
 			config.setAllowedMethods(Collections.singletonList("*"));
 			config.setAllowedHeaders(Collections.singletonList("*"));
 			config.setAllowCredentials(true);
 			return config;
 		}));
-		http.csrf(csrf -> csrf.disable());
+//		http.cors(cors->cors.disable());
 
 		http.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll();
@@ -51,8 +54,9 @@ public class WebSecurityConfig {
 			logout.invalidateHttpSession(true);
 		});
 		http.sessionManagement(session -> {
-			session.maximumSessions(1);
+			session.maximumSessions(2);
 			session.invalidSessionUrl("/login");
+
 		});
 		return http.build();
 	}

@@ -19,7 +19,6 @@ import com.example.urlshortener.service.userService;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/user")
 public class UserController {
 	@Autowired

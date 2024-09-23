@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.urlshortener.Exceptions.AliasNotFoundException;
@@ -36,7 +39,7 @@ public class urlServiceImp implements urlService {
 		for (Url a : lit) {
 			if (a.getAlias().equals(urldto.getAlias())) {
 				throw new AliasNotUniqueException("Alias: " + urldto.getAlias() + " is not unique");
-			} else if(a.getUrl().equals(urldto.getUrl())){
+			} else if (a.getUrl().equals(urldto.getUrl())) {
 				throw new UrlNotUniqueException("URL already exists");
 			}
 		}
@@ -50,77 +53,70 @@ public class urlServiceImp implements urlService {
 	public urlDTO getRedirect(String username, String alias) {
 		User user = userRepo.findByUsername(username);
 		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
-		Url url=null;
-		for(Url a: lit) {
-			if(a.getAlias().equals(alias)) {
-				url=a;
+		Url url = null;
+		for (Url a : lit) {
+			if (a.getAlias().equals(alias)) {
+				url = a;
 				break;
 			}
-		}if(url==null) {
-			throw new AliasNotUniqueException("Alias: "+alias+" is not found!");
 		}
-		
+		if (url == null) {
+			throw new AliasNotUniqueException("Alias: " + alias + " is not found!");
+		}
+
 		return modelmapper.map(url, urlDTO.class);
 	}
 
 	@Override
-	public void deleteRedirect(String username,String alias) {
+	public void deleteRedirect(String username, String alias) {
 		User user = userRepo.findByUsername(username);
 		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
-		Url url=null;
-		for(Url a: lit) {
-			if(a.getAlias().equals(alias)) {
-				url=a;
+		Url url = null;
+		for (Url a : lit) {
+			if (a.getAlias().equals(alias)) {
+				url = a;
 				break;
 			}
-		}if(url==null) {
-			throw new AliasNotUniqueException("Alias: "+alias+" is not found!");
+		}
+		if (url == null) {
+			throw new AliasNotUniqueException("Alias: " + alias + " is not found!");
 		}
 		urlRepo.delete(url);
 		return;
 	}
-	
 
 	@Override
-	public List<urlDTO> Userurls(String username) {
-		
-		User user = userRepo.findByUsername(username);
+	public Page<Url> Userurls(String username) {
 
-		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
-	
-		List<urlDTO> list = new ArrayList<>();
-		for(Url a: lit) {
-			urlDTO b = new urlDTO();
-			b.setAlias(a.getAlias());
-			b.setUrl(a.getUrl());
-			list.add(b);
-		}
-		return list;
+		User user = userRepo.findByUsername(username);
+		Pageable page = PageRequest.of(0, 5);
+
+		Page<Url> lit = urlRepo.findAllByUsers(page, user);
+		return lit;
 	}
 
 	@Override
 	public void updateRedirect(String username, urlUpdateDTO urlDto) {
 		User user = userRepo.findByUsername(username);
 		List<Url> urlList = urlRepo.findAllByUsersId(user.getId());
-		Url a =null;
-		for(Url url: urlList) {
-			if(url.getAlias().equals(urlDto.getAlias())) {
-				for(Url url_c: urlList) {
-					if(url_c.getUrl().equals(urlDto.getNewUrl())) {
+		Url a = null;
+		for (Url url : urlList) {
+			if (url.getAlias().equals(urlDto.getAlias())) {
+				for (Url url_c : urlList) {
+					if (url_c.getUrl().equals(urlDto.getNewUrl())) {
 						throw new UrlNotUniqueException("Entered new URL already exists!");
 					}
 				}
 				url.setUrl(urlDto.getNewUrl());
-				a=url;
+				a = url;
 				break;
 			}
 		}
-		if(a!= null) {
+		if (a != null) {
 			urlRepo.save(a);
-		}else throw new AliasNotFoundException("Url with Alias:"+urlDto.getAlias()+" not found");
-			
-		
-	}
+		} else
+			throw new AliasNotFoundException("Url with Alias:" + urlDto.getAlias() + " not found");
 
+	}
 
 }
