@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.urlshortener.payload.passwordDTO;
 import com.example.urlshortener.payload.userDTO;
 import com.example.urlshortener.service.userService;
 
@@ -44,6 +44,13 @@ public class UserController {
 	public ResponseEntity<String> deleteUser(@PathVariable long id) {
 		userService.deleteUser(id);
 		return new ResponseEntity<String>("User with ID: " + id + " has been deleted succesfully.", HttpStatus.OK);
+	}
+
+	@PostMapping("/updatePassword")
+	public ResponseEntity<?> updatePassword(Authentication auth, @RequestBody passwordDTO password) {
+
+		return new ResponseEntity<>(userService.changePassword(auth.getName(), password), HttpStatus.ACCEPTED);
+
 	}
 
 }

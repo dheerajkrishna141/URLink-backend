@@ -12,6 +12,7 @@ import com.example.urlshortener.Repository.UserRepository;
 import com.example.urlshortener.entity.Roles;
 import com.example.urlshortener.entity.User;
 import com.example.urlshortener.payload.loginMessage;
+import com.example.urlshortener.payload.passwordDTO;
 import com.example.urlshortener.payload.userDTO;
 import com.example.urlshortener.service.EncryptionService;
 import com.example.urlshortener.service.userService;
@@ -69,6 +70,20 @@ public class userServiceImpl implements userService {
 
 		return new loginMessage("Login Success", true, user);
 
+	}
+
+	@Override
+	public boolean changePassword(String username, passwordDTO password) {
+		try {
+			User user = userRepository.findByUsername(username);
+			String encryptPass = encrypt.EncryptPassword(password.getPassword());
+			user.setPassword(encryptPass);
+			userRepository.save(user);
+		} catch (Exception e) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
