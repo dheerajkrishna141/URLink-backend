@@ -86,10 +86,10 @@ public class urlServiceImp implements urlService {
 	}
 
 	@Override
-	public Page<Url> Userurls(String username) {
+	public Page<Url> Userurls(String username, Integer pageNo) {
 
 		User user = userRepo.findByUsername(username);
-		Pageable page = PageRequest.of(0, 5);
+		Pageable page = PageRequest.of(pageNo, 5);
 
 		Page<Url> lit = urlRepo.findAllByUsers(page, user);
 		return lit;

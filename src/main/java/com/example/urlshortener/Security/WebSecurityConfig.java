@@ -40,6 +40,7 @@ public class WebSecurityConfig {
 		http.authorizeHttpRequests(auth -> {
 			auth.requestMatchers("/").permitAll();
 			auth.requestMatchers("/user/register").permitAll();
+			auth.requestMatchers("/actuator/**").permitAll();
 			auth.anyRequest().authenticated();
 
 		});

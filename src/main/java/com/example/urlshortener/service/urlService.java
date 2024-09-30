@@ -13,5 +13,5 @@ public interface urlService {
 	public urlDTO getRedirect(String username, String alias);
 	public void deleteRedirect(String username, String alias);
 	public void updateRedirect(String username, urlUpdateDTO urlDto);
-	public Page<Url> Userurls(String username);
+	public Page<Url> Userurls(String username, Integer pageNo);
 }

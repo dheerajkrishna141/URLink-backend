@@ -50,9 +50,9 @@ public class URLcontroller {
 
 	@Operation(description = "Displays all the URL's of the user")
 	@GetMapping
-	public ResponseEntity<?> viewRedirects(Authentication auth) {
+	public ResponseEntity<?> viewRedirects(Authentication auth, @RequestParam(defaultValue = "0") Integer pageNo) {
 		String username = auth.getName();
-		return new ResponseEntity<>(urlservice.Userurls(username), HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(urlservice.Userurls(username, pageNo), HttpStatus.ACCEPTED);
 	}
 
 	@PostMapping("/update")
