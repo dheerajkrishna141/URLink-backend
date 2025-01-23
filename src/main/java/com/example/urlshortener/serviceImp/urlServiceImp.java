@@ -1,6 +1,5 @@
 package com.example.urlshortener.serviceImp;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.example.urlshortener.Exceptions.AliasNotFoundException;
 import com.example.urlshortener.Exceptions.AliasNotUniqueException;
 import com.example.urlshortener.Exceptions.UrlNotUniqueException;
-import com.example.urlshortener.Exceptions.UserNotFoundException;
 import com.example.urlshortener.Repository.UrlRepository;
 import com.example.urlshortener.Repository.UserRepository;
 import com.example.urlshortener.entity.Url;
@@ -32,7 +30,7 @@ public class urlServiceImp implements urlService {
 	private ModelMapper modelmapper;
 
 	@Override
-	public urlDTO createRedirect(String username, urlDTO urldto) {
+	public String createRedirect(String username, urlDTO urldto) {
 		User user = userRepo.findByUsername(username);
 		List<Url> lit = urlRepo.findAllByUsersId(user.getId());
 		urldto.setUrl(urldto.getUrl().trim());
@@ -46,7 +44,7 @@ public class urlServiceImp implements urlService {
 		Url url = urlRepo.save(modelmapper.map(urldto, Url.class));
 		url.setUsers(user);
 		Url savedurl = urlRepo.save(url);
-		return modelmapper.map(savedurl, urlDTO.class);
+		return "Successfully added!";
 	}
 
 	@Override
@@ -86,15 +84,15 @@ public class urlServiceImp implements urlService {
 	}
 
 	@Override
-	public Page<Url> Userurls(String username, Integer pageNo) {
+	public Page<Url> Userurls(String username, Integer pageNo, Integer pageSize) {
 
 		User user = userRepo.findByUsername(username);
-		Pageable page = PageRequest.of(pageNo, 5);
+		Pageable page = PageRequest.of(pageNo, pageSize);
 
 		Page<Url> lit = urlRepo.findAllByUsers(page, user);
 		return lit;
 	}
-
+	
 	@Override
 	public void updateRedirect(String username, urlUpdateDTO urlDto) {
 		User user = userRepo.findByUsername(username);

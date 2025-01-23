@@ -1,9 +1,0 @@
-version: '3.1'
-services:
-  url_shortener-db:
-    container_name: url_shortener-db
-    image: mysql 
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root

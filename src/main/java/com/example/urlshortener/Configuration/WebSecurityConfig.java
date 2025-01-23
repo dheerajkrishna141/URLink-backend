@@ -1,18 +1,13 @@
-package com.example.urlshortener.Security;
+package com.example.urlshortener.Configuration;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-
-import com.example.urlshortener.Configuration.AuthenticationEntryPoint;
-import com.example.urlshortener.Configuration.CustomLogoutHandler;
 
 @Configuration
 public class WebSecurityConfig {
@@ -38,7 +33,10 @@ public class WebSecurityConfig {
 //		http.cors(cors->cors.disable());
 
 		http.authorizeHttpRequests(auth -> {
+			auth.requestMatchers("/swagger-ui/**").permitAll();
 			auth.requestMatchers("/").permitAll();
+			auth.requestMatchers("/docs").permitAll();
+			auth.requestMatchers("/v3/**").permitAll();
 			auth.requestMatchers("/user/register").permitAll();
 			auth.requestMatchers("/actuator/**").permitAll();
 			auth.anyRequest().authenticated();

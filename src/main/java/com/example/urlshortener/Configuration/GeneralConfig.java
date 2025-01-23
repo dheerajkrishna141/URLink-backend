@@ -1,4 +1,4 @@
-package com.example.urlshortener.Config;
+package com.example.urlshortener.Configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
