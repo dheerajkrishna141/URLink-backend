@@ -43,7 +43,7 @@ public class urlServiceImp implements urlService {
 		}
 		Url url = urlRepo.save(modelmapper.map(urldto, Url.class));
 		url.setUsers(user);
-		Url savedurl = urlRepo.save(url);
+		urlRepo.save(url);
 		return "Successfully added!";
 	}
 
@@ -59,7 +59,7 @@ public class urlServiceImp implements urlService {
 			}
 		}
 		if (url == null) {
-			throw new AliasNotUniqueException("Alias: " + alias + " is not found!");
+			throw new AliasNotFoundException("Alias: " + alias + " is not found!");
 		}
 
 		return modelmapper.map(url, urlDTO.class);
@@ -77,7 +77,7 @@ public class urlServiceImp implements urlService {
 			}
 		}
 		if (url == null) {
-			throw new AliasNotUniqueException("Alias: " + alias + " is not found!");
+			throw new AliasNotFoundException("Alias: " + alias + " is not found!");
 		}
 		urlRepo.delete(url);
 		return;

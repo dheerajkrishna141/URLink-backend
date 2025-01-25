@@ -9,7 +9,7 @@ import com.example.urlshortener.payload.userDTO;
 public interface userService {
 	
 	public User createUser(userDTO userdto);
-	public void deleteUser(long id);
+	public String deleteUser(long id);
 	public loginMessage loginUser(String string);
 	public boolean changePassword(String username, passwordDTO password);
 

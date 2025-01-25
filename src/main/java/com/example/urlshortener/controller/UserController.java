@@ -58,8 +58,8 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = MediaType.ALL_VALUE, schema = @Schema(implementation = String.class)))
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable long id) {
-		userService.deleteUser(id);
-		return new ResponseEntity<String>("User with ID: " + id + " has been deleted succesfully.", HttpStatus.OK);
+		
+		return new ResponseEntity<String>(userService.deleteUser(id), HttpStatus.OK);
 	}
 
 	@Operation(summary = "Update current user's password", security = @SecurityRequirement(name = "basicAuth"))
