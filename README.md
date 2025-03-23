@@ -39,4 +39,4 @@ The URLink Backend is the core application for [URLink (urlshortener front-end)]
 
 
 ## Documentation
-For detailed API documentation and usage instructions, visit [ URL Shortener Backend Documentation.](https://dheerajkrishna141.github.io/URL_Shortener-backend/api-docs.html) 
+For detailed API documentation and usage instructions, visit [ URL Shortener Backend Documentation.](https://dheerajkrishna141.github.io/URLink-backend/api-docs.html) 
