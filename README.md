@@ -1,7 +1,7 @@
 # URLink Backend
 
 ## Overview
-The URLink Backend is the core application for [URLink (urlshortener front-end)](https://github.com/dheerajkrishna141/URLink-frontend). This Spring Boot application offers RESTful APIs to shorten URLs with user-specific aliases, facilitating redirection to the original URLs. It also includes features such as user authentication, role-based authorization, and Cross-Origin Resource Sharing (CORS) to ensure secure access to user information.
+The URLink Backend is the core application for [URLink](https://github.com/dheerajkrishna141/URLink-frontend). This Spring Boot application offers RESTful APIs to shorten URLs with user-specific aliases, facilitating redirection to the original URLs. It also includes features such as user authentication, role-based authorization, and Cross-Origin Resource Sharing (CORS) to ensure secure access to user information.
 
 ## Installation
 
@@ -39,4 +39,4 @@ The URLink Backend is the core application for [URLink (urlshortener front-end)]
 
 
 ## Documentation
-For detailed API documentation and usage instructions, visit [ URL Shortener Backend Documentation.](https://dheerajkrishna141.github.io/URLink-backend/api-docs.html) 
+For detailed API documentation and usage instructions, visit [ URLink Backend Documentation.](https://dheerajkrishna141.github.io/URLink-backend/api-docs.html) 
