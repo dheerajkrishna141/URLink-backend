@@ -9,7 +9,7 @@ The URLink Backend is the core application for [URLink](https://github.com/dheer
 
 - Java 11 or higher
 - Maven
-- MySQL (or any other supported database)
+- MySQL
 
 ### Setup
 
@@ -17,11 +17,11 @@ The URLink Backend is the core application for [URLink](https://github.com/dheer
    
    ```bash
    git clone https://github.com/dheerajkrishna141/URLink-backend.git
-3. Navigate to the project directory:
+2. Navigate to the project directory:
    
    ```bash
    cd urlshortener-backend
-4. Configure the database connection in
+3. Configure the database connection in
    
    ```src/main/resources/application.properties:```
 
@@ -29,10 +29,10 @@ The URLink Backend is the core application for [URLink](https://github.com/dheer
    spring.datasource.url=jdbc:mysql://localhost:3306/your_database
    spring.datasource.username=your_username
    spring.datasource.password=your_password
-5. Build the project:
+4. Build the project:
    ```bash
    mvn clean install
-6. Run the project:
+5. Run the project:
    ```bash
    mvn spring-boot:run
 
